@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var arr1 = [{
+        id:1,
+        type:"a",
+        name:"a",
+        result:[{data1:"aa",data2:"aa"}]
+    },{
+        id:2,
+        type:"b",
+        name:"b",
+        result:[{data1:"bb",data2:"bb"}]
+    },{
+        id:3,
+        type:"c",
+        name:"c",
+        result:[{data1:"cc",data2:"cc"}]
+    }];
+    var arr2 = [{
+        id:1,
+        type:"a",
+        name:"a",
+        result:[{data1:"aa",data2:"aa"}]
+    },{
+        id:2,
+        type:"b",
+        name:"b",
+        result:[{data1:"bb2",data2:"bb2"}]
+    },{
+        id:3,
+        type:"d",
+        name:"d",
+        result:[{data1:"cc",data2:"cc"}]
+    }];
+    console.log(getDiffData(arr2,arr1,'id'));
+    /**
+     *比较两个数组中的不同,并返回第一个数组中与第二个数组中不同的数据组成的新数组
+     * @param currentData 第一个数组
+     * @param originalData 第二个数组
+     * @param id 默认使用id 用于数组中每一项进行比较的索引键
+     */
+    function getDiffData(currentData,originalData,id){
+        if(!(currentData instanceof Array)){
+            throw new Error("the first params must be a Array");
+        }
+        if(!(originalData instanceof Array)){
+            throw new Error("the second params must be a Array");
+        }
+        //id的默认值赋为"id"
+        id = id||"id";
+        //复制一份originalData,防止对原originalData造成破坏
+        originalData = JSON.parse(JSON.stringify(originalData));
+        return currentData.filter(function(currentItem){
+            //与currentItem匹配的originalData中的数据
+            var originalItem;
+            //与currentItem匹配的originData中的数据在数组中的位置
+            var originalId;
+            originalData.some(function(item,idx){
+                if(item[id]===currentItem[id]){
+                    originalItem = item;
+                    originalId = idx;
+                    return true;
+                }
+            });
+            if(originalItem){
+                originalData.splice(originalId,1);
+                return JSON.stringify(currentItem)!==JSON.stringify(originalItem);
+            }
+        })
+    }
+</script>
+</body>
+</html>
